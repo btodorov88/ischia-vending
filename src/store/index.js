@@ -5,16 +5,13 @@ import router from '@/router/index'
 
 Vue.use(Vuex)
 
-fb.vendingItemsCollection.onSnapshot(snapshot => {
-  let itemsArray = []
-
-  snapshot.forEach(async doc => {
+fb.vendingItemsCollection.orderBy('price').onSnapshot(async snapshot => {
+  let itemsArray = await Promise.all(snapshot.docs.map(async doc => {
     let item = doc.data()
     item.id = doc.id
     item.imgUrl = await fb.storage.ref(`items/${item.img}`).getDownloadURL()
-
-    itemsArray.push(item)
-  })
+    return item;
+  }))
 
   store.commit('setVendingItems', itemsArray)
 })
@@ -33,7 +30,27 @@ const store = new Vuex.Store({
       state.vendingItems = val
     },
     addCartItem(state, val) {
-      state.cartItems.push({vendingItem: val, quantity: 1})
+      let existing = state.cartItems.find(item => item.vendingItem.id == val.id);
+      if (existing) {
+        existing.quantity += 1
+      } else {
+        state.cartItems.push({ vendingItem: val, quantity: 1 })
+      }
+    },
+    incrementCartItem(state, id) {
+      let existing = state.cartItems.find(item => item.vendingItem.id == id);
+      existing.quantity += 1
+    },
+    decrementCartItem(state, id) {
+      let existing = state.cartItems.find(item => item.vendingItem.id == id);
+      if (existing.quantity > 1) {
+        existing.quantity -= 1
+      } else {
+        state.cartItems = state.cartItems.filter(item => item.vendingItem.id !== id)
+      }
+    },
+    removeCartItem(state, id) {
+      state.cartItems = state.cartItems.filter(item => item.vendingItem.id !== id)
     },
     clearCart(state) {
       state.cartItems = []

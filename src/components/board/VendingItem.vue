@@ -1,7 +1,8 @@
 <template>
   <div class="item" v-on:click="$emit('on-select')">
+    <h3>{{item.name}}</h3>
     <img :src="item.imgUrl" />
-    <h3>€ {{item.price}}</h3>
+    <h3>€ {{item.price.toFixed(2)}}</h3>
   </div>
 </template>
 

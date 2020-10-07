@@ -1,35 +1,56 @@
 <template>
   <div class="item">
-    <div class="buttons">
+    <button class="buttons" v-on:click="removeCartItem(item.vendingItem.id)">
       <i class="fas fa-times"></i>
-    </div>
+    </button>
 
-    <div class="description">
-      <span>{{item.vendingItem.name}}</span>
-    </div>
+    <span class="description">{{ item.vendingItem.name }}</span>
 
     <div class="quantity">
-      <button class="plus-btn" type="button" name="button">
+      <button
+        class="plus-btn"
+        type="button"
+        name="button"
+        v-on:click="decrementCartItem(item.vendingItem.id)"
+      >
         <i class="fas fa-minus"></i>
       </button>
       <input type="text" name="name" :value="item.quantity" />
-      <button class="minus-btn" type="button" name="button">
+      <button
+        class="minus-btn"
+        type="button"
+        name="button"
+        v-on:click="incrementCartItem(item.vendingItem.id)"
+      >
         <i class="fas fa-plus"></i>
       </button>
     </div>
-    <div class="total-price">{{item.vendingItem.price * item.quantity}}</div>
+    <div class="total-price">
+      €{{ (item.vendingItem.price * item.quantity).toFixed(2) }}
+    </div>
   </div>
 </template>
 
 <script>
-export default {props: ['item', 'add']};
+import { mapMutations } from "vuex";
+export default {
+  props: ["item", "add"],
+  methods: {
+    ...mapMutations([
+      "removeCartItem",
+      "incrementCartItem",
+      "decrementCartItem",
+    ]),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .item {
   padding: 20px 30px;
-  height: 120px;
+  height: 90px;
   display: flex;
+  align-items: center;
 }
 
 .item:nth-child(3) {
@@ -38,37 +59,13 @@ export default {props: ['item', 'add']};
 }
 
 .buttons {
-  position: relative;
-  padding-top: 30px;
-  margin-right: 60px;
-}
-.delete-btn {
-  display: inline-block;
-  cursor: pointer;
-  width: 18px;
-  height: 17px;
+  margin-right: 30px
 }
 
 .description {
   padding-top: 10px;
   margin-right: 60px;
   width: 115px;
-}
-
-.description span {
-  display: block;
-  font-size: 14px;
-  color: #43484d;
-  font-weight: 400;
-}
-
-.description span:first-child {
-  margin-bottom: 5px;
-}
-.description span:last-child {
-  font-weight: 300;
-  margin-top: 8px;
-  color: #86939e;
 }
 
 .quantity {
@@ -85,7 +82,7 @@ export default {props: ['item', 'add']};
   font-weight: 300;
 }
 
-button[class*="btn"] {
+button {
   width: 30px;
   height: 30px;
   background-color: #e1e8ee;

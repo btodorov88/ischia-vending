@@ -1,12 +1,12 @@
 <template>
-  <div class="shopping-cart">
+  <div v-if="cartItems.length > 0" class="shopping-cart">
     <!-- Title -->
-    <div class="title">
-      <span>Cart</span><button v-on:click="clearCart" class="btn-clear">Clear</button>
+    <div class="title-container">
+      <button v-on:click="clearCart" class="btn-clear">Clear</button>
     </div>
     <CartItem v-for="item in cartItems" :key="item.id" :item="item" />
     <div class="total">
-      <span>Total: {{ total }}</span>
+      <h3>Total: €{{ total.toFixed(2) }}</h3>
     </div>
   </div>
 </template>
@@ -39,6 +39,11 @@ export default {
 
   display: flex;
   flex-direction: column;
+}
+
+.title-container {
+  display:flex;
+  justify-content: flex-end;
 }
 
 .title {
