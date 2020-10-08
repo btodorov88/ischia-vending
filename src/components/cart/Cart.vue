@@ -6,7 +6,7 @@
     </div>
     <CartItem v-for="item in cartItems" :key="item.id" :item="item" />
     <div class="total">
-      <h3>Total: €{{ total.toFixed(2) }}</h3>
+      <h2>Total: €{{ total.toFixed(2) }}</h2>
     </div>
   </div>
 </template>
@@ -44,6 +44,7 @@ export default {
 .title-container {
   display:flex;
   justify-content: flex-end;
+  margin-bottom: 10px;
 }
 
 .title {

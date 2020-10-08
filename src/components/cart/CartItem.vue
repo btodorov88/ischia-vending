@@ -6,6 +6,8 @@
 
     <span class="description">{{ item.vendingItem.name }}</span>
 
+    <span class="price">€{{item.vendingItem.price.toFixed(2)}}</span>
+
     <div class="quantity">
       <button
         class="plus-btn"
@@ -17,6 +19,7 @@
       </button>
       <input
         type="number"
+        onClick="this.select();"
         :value="item.quantity"
         @keyup="onChange"
       />
@@ -62,9 +65,8 @@ export default {
   align-items: center;
 }
 
-.item:nth-child(3) {
+.item:nth-child(n+3){
   border-top: 1px solid #e1e8ee;
-  border-bottom: 1px solid #e1e8ee;
 }
 
 .buttons {
@@ -72,13 +74,19 @@ export default {
 }
 
 .description {
-  padding-top: 10px;
-  margin-right: 60px;
-  width: 115px;
+  margin-right: 40px;
+  min-width: 110px;
+}
+
+.price {
+  width: 83px;
+  text-align: center;
+  font-size: 16px;
+  color: #43484d;
+  font-weight: 300;
 }
 
 .quantity {
-  padding-top: 20px;
   margin-right: 60px;
 }
 .quantity input {
@@ -112,11 +120,21 @@ input:focus {
 }
 
 .total-price {
-  width: 83px;
-  padding-top: 27px;
+  width: 60px;
   text-align: center;
-  font-size: 16px;
-  color: #43484d;
+  font-size: 18px;
   font-weight: 300;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 </style>
