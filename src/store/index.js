@@ -5,17 +5,6 @@ import router from '@/router/index'
 
 Vue.use(Vuex)
 
-fb.vendingItemsCollection.orderBy('price').onSnapshot(async snapshot => {
-  let itemsArray = await Promise.all(snapshot.docs.map(async doc => {
-    let item = doc.data()
-    item.id = doc.id
-    item.imgUrl = await fb.storage.ref(`items/${item.img}`).getDownloadURL()
-    return item;
-  }))
-
-  store.commit('setVendingItems', itemsArray)
-})
-
 const store = new Vuex.Store({
   state: {
     userProfile: {},
@@ -36,6 +25,10 @@ const store = new Vuex.Store({
       } else {
         state.cartItems.push({ vendingItem: val, quantity: 1 })
       }
+    },
+    setCartItemQuantity(state, {id, quantity}) {
+      let existing = state.cartItems.find(item => item.vendingItem.id == id);
+      existing.quantity = quantity
     },
     incrementCartItem(state, id) {
       let existing = state.cartItems.find(item => item.vendingItem.id == id);
@@ -86,7 +79,18 @@ const store = new Vuex.Store({
       // redirect to login view
       router.push('/login')
     },
-    async createPost({ state, commit }, post) { // eslint-disable-line no-unused-vars
+    async loadVendingItems({ commit }) {
+      let data = await fb.vendingItemsCollection.orderBy('price').get();
+      let itemsArray = await Promise.all(data.docs.map(async doc => {
+        let item = doc.data()
+        item.id = doc.id
+        item.imgUrl = await fb.storage.ref(`items/${item.img}`).getDownloadURL()
+        return item;
+      }))
+
+      store.commit('setVendingItems', itemsArray)
+    },
+    async createPost({ state, commit }, post) {
       // create post in firebase
       await fb.vendingItemsCollection.add({
         createdOn: new Date(),

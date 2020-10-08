@@ -15,7 +15,11 @@
       >
         <i class="fas fa-minus"></i>
       </button>
-      <input type="text" name="name" :value="item.quantity" />
+      <input
+        type="number"
+        :value="item.quantity"
+        @keyup="onChange"
+      />
       <button
         class="minus-btn"
         type="button"
@@ -36,8 +40,13 @@ import { mapMutations } from "vuex";
 export default {
   props: ["item", "add"],
   methods: {
+    onChange(event) {
+      const value = parseInt(event.target.value)
+      this.setCartItemQuantity({id: this.item.vendingItem.id, quantity: value})
+    },
     ...mapMutations([
       "removeCartItem",
+      "setCartItemQuantity",
       "incrementCartItem",
       "decrementCartItem",
     ]),
@@ -59,7 +68,7 @@ export default {
 }
 
 .buttons {
-  margin-right: 30px
+  margin-right: 30px;
 }
 
 .description {

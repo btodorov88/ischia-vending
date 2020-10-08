@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import VendingItem from "@/components/board/VendingItem";
 
 export default {
@@ -19,7 +19,13 @@ export default {
     ...mapMutations([
       "addCartItem",
     ]),
+    ...mapActions([
+      "loadVendingItems",
+    ]),
   },
+  mounted() {
+    this.loadVendingItems()
+  }
 };
 </script>
 
