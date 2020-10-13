@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    loading: true,
     userProfile: {},
     vendingItems: [],
     cartItems: [],
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
     },
     setVendingItems(state, val) {
       state.vendingItems = val
+      state.loading = false
     },
     addCartItem(state, val) {
       let existing = state.cartItems.find(item => item.vendingItem.id == val.id);
@@ -26,7 +28,7 @@ const store = new Vuex.Store({
         state.cartItems.push({ vendingItem: val, quantity: 1 })
       }
     },
-    setCartItemQuantity(state, {id, quantity}) {
+    setCartItemQuantity(state, { id, quantity }) {
       let existing = state.cartItems.find(item => item.vendingItem.id == id);
       existing.quantity = quantity
     },
@@ -87,19 +89,25 @@ const store = new Vuex.Store({
         item.imgUrl = await fb.storage.ref(`items/${item.img}`).getDownloadURL()
         return item;
       }))
-
-      store.commit('setVendingItems', itemsArray)
+      commit('setVendingItems', itemsArray)
     },
-    async createPost({ state, commit }, post) {
+    async saveVendingItem({ dispatch }, item) {
       // create post in firebase
-      await fb.vendingItemsCollection.add({
-        createdOn: new Date(),
-        content: post.content,
-        userId: fb.auth.currentUser.uid,
-        userName: state.userProfile.name,
-        comments: 0,
-        likes: 0
-      })
+      if (item.id) {
+        await fb.vendingItemsCollection.doc(item.id).update({
+          name: item.name,
+          price: item.price
+        })
+      } else {
+        await fb.vendingItemsCollection.add({
+          createdOn: new Date(),
+          name: item.name,
+          price: item.price,
+          img: 'default.png'
+        })
+      }
+
+      dispatch('loadVendingItems')
     },
   }
 })

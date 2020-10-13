@@ -11,18 +11,22 @@ const routes = [
     name: 'Dashboard',
     component: Dashboard
   },
+  // {
+  //   path: '/login',
+  //   name: 'Login',
+  //   component: () => import( /* webpackChunkName: "login" */ '@/views/Login.vue')
+  // },
+  // {
+  //   path: '/settings',
+  //   name: 'settings',
+  //   component: () => import( /* webpackChunkName: "settings" */ '@/views/Settings.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //   }
+  // },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import( /* webpackChunkName: "login" */ '@/views/Login.vue')
-  },
-  {
-    path: '/settings',
-    name: 'settings',
-    component: () => import( /* webpackChunkName: "settings" */ '@/views/Settings.vue'),
-    meta: {
-      requiresAuth: true
-    }
+    path: '*',
+    redirect: '/'
   }
 ]
 
