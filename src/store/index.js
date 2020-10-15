@@ -90,6 +90,7 @@ const store = new Vuex.Store({
         return item;
       }))
       commit('setVendingItems', itemsArray)
+      commit('clearCart')
     },
     async saveVendingItem({ dispatch }, item) {
       if (item.id) {
