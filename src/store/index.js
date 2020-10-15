@@ -92,7 +92,6 @@ const store = new Vuex.Store({
       commit('setVendingItems', itemsArray)
     },
     async saveVendingItem({ dispatch }, item) {
-      // create post in firebase
       if (item.id) {
         await fb.vendingItemsCollection.doc(item.id).update({
           name: item.name,
@@ -106,6 +105,11 @@ const store = new Vuex.Store({
           img: 'default.png'
         })
       }
+
+      dispatch('loadVendingItems')
+    },
+    async deleteVendingItem({ dispatch }, item) {
+      await fb.vendingItemsCollection.doc(item.id).delete()
 
       dispatch('loadVendingItems')
     },

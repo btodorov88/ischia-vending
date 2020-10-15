@@ -2,7 +2,7 @@
   <div
     class="item"
     v-on:click="$emit('on-select')"
-    @contextmenu="el => $emit('on-contextmenu', el)"
+    @contextmenu.stop="el => $emit('on-contextmenu', el)"
   >
     <h3>{{ item.name }}</h3>
     <img :src="item.imgUrl" />

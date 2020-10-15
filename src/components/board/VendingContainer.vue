@@ -1,5 +1,5 @@
 <template>
-  <div class="items-container">
+  <div class="items-container" @contextmenu.stop="(e) => onContext(e)">
     <VendingItem
       v-for="item in vendingItems"
       :key="item.id"
@@ -17,13 +17,30 @@
           }
         "
     /></VendingItemModal>
-    <PopupMenu
-      v-if="contextItem"
+    <ItemMenu
+      v-if="contextItem && contextItem.item"
       :position="contextItem.position"
       @on-close="contextItem = null"
       @on-edit="
         () => {
           editItem = contextItem.item;
+          contextItem = null;
+        }
+      "
+      @on-delete="
+        () => {
+          deleteVendingItem(contextItem.item);
+          contextItem = null;
+        }
+      "
+    />
+    <ItemContainerMenu
+      v-else-if="contextItem"
+      :position="contextItem.position"
+      @on-close="contextItem = null"
+      @on-add="
+        () => {
+          editItem = {};
           contextItem = null;
         }
       "
@@ -36,14 +53,16 @@ import { mapState, mapMutations, mapActions } from "vuex";
 import VendingItem from "@/components/board/VendingItem";
 import VendingItemModal from "@/components/board/GenericModal";
 import FormVendingItem from "@/components/board/FormVendingItem";
-import PopupMenu from "@/components/PopupMenu";
+import ItemMenu from "./menu/ItemMenu";
+import ItemContainerMenu from "./menu/ItemContainerMenu";
 
 export default {
   components: {
     VendingItem,
     VendingItemModal,
     FormVendingItem,
-    PopupMenu,
+    ItemMenu,
+    ItemContainerMenu,
   },
   data: function () {
     return {
@@ -56,7 +75,7 @@ export default {
   },
   methods: {
     ...mapMutations(["addCartItem"]),
-    ...mapActions(["saveVendingItem"]),
+    ...mapActions(["saveVendingItem", "deleteVendingItem"]),
     onContext(e, item) {
       e.preventDefault();
       this.contextItem = {
@@ -73,5 +92,7 @@ export default {
   flex: 1;
   display: flex;
   flex-flow: row wrap;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 </style>

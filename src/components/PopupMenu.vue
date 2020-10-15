@@ -5,8 +5,7 @@
     v-outside-click="() => $emit('on-close')"
     class="popup-box vertical-menu"
   >
-    <a @click.stop="$emit('on-edit')">Edit</a>
-    <a href="#">Delete</a>
+    <slot></slot>
   </div>
 </template>
 
