@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     onOk() {
-      this.$emit("on-save", parseInt(this.value));
+      this.$emit("on-save", parseFloat(this.value));
     },
     append(val) {
       let current = this.value;
