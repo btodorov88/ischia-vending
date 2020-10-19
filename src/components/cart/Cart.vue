@@ -1,13 +1,13 @@
 <template>
-  <div v-if="cartItems.length > 0" class="shopping-cart">
+  <div class="shopping-cart">
     <!-- Title -->
     <div class="title-container">
+      <div class="total">
+        <h2>Total: €{{ total.toFixed(2) }}</h2>
+      </div>
       <button v-on:click="clearCart" class="btn-clear">Clear</button>
     </div>
     <CartItem v-for="item in cartItems" :key="item.id" :item="item" />
-    <div class="total">
-      <h2>Total: €{{ total.toFixed(2) }}</h2>
-    </div>
   </div>
 </template>
 
@@ -36,14 +36,15 @@ export default {
 <style lang="scss" scoped>
 .shopping-cart {
   margin: 20px;
+  min-width: 565px;
 
   display: flex;
   flex-direction: column;
 }
 
 .title-container {
-  display:flex;
-  justify-content: flex-end;
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 
@@ -56,7 +57,7 @@ export default {
 }
 
 .btn-clear {
-  background-color: #4CAF50; /* Green */
+  background-color: #4caf50; /* Green */
   border: none;
   color: white;
   padding: 15px 32px;

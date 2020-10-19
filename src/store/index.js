@@ -86,7 +86,6 @@ const store = new Vuex.Store({
       let itemsArray = await Promise.all(data.docs.map(async doc => {
         let item = doc.data()
         item.id = doc.id
-        item.imgUrl = await fb.storage.ref(`items/${item.img}`).getDownloadURL()
         return item;
       }))
       commit('setVendingItems', itemsArray)
